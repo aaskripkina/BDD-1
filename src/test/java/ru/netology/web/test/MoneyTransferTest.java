@@ -20,6 +20,7 @@ class MoneyTransferTest {
         var verificationPage = loginPage.validLogin(authInfo);
         var verificationCode = DataHelper.getVerificationCodeFor(authInfo);
         verificationPage.validVerify(verificationCode);
+
     }
 
 
@@ -27,38 +28,38 @@ class MoneyTransferTest {
     void transferMoneyFromTheFirstCardToTheSecondCard() {
         var dashboardPage = new DashboardPage();
 
-        String idRechargeCard = DataHelper.Card2().getIdCard();
+        String idRechargeCard = DataHelper.card2().getIdCard();
         int sumTransfer = 200;
-        String numberTransferCard = DataHelper.Card1().getNumberCard();
+        String numberTransferCard = DataHelper.card1().getNumberCard();
 
-        int balanceFirstCard = dashboardPage.getCardBalance(DataHelper.Card1().getIdCard());
-        int balanceSecondCard = dashboardPage.getCardBalance(DataHelper.Card2().getIdCard());
+        int balanceFirstCard = dashboardPage.getCardBalance(DataHelper.card1().getIdCard());
+        int balanceSecondCard = dashboardPage.getCardBalance(DataHelper.card2().getIdCard());
 
         dashboardPage
                 .choiceRechargeCard(idRechargeCard)
                 .transferMoney(sumTransfer,numberTransferCard);
 
-        Assertions.assertEquals(balanceFirstCard - sumTransfer, dashboardPage.getCardBalance(DataHelper.Card1().getIdCard()));
-        Assertions.assertEquals(balanceSecondCard + sumTransfer, dashboardPage.getCardBalance(DataHelper.Card2().getIdCard()));
+        Assertions.assertEquals(balanceFirstCard - sumTransfer, dashboardPage.getCardBalance(DataHelper.card1().getIdCard()));
+        Assertions.assertEquals(balanceSecondCard + sumTransfer, dashboardPage.getCardBalance(DataHelper.card2().getIdCard()));
 
     }
     @Test
     void transferMoneyFromTheSecondCardToTheFirstCard() {
         var dashboardPage = new DashboardPage();
 
-        String idRechargeCard = DataHelper.Card1().getIdCard();
+        String idRechargeCard = DataHelper.card1().getIdCard();
         int sumTransfer = 200;
-        String numberTransferCard = DataHelper.Card2().getNumberCard();
+        String numberTransferCard = DataHelper.card2().getNumberCard();
 
-        int balanceFirstCard = dashboardPage.getCardBalance(DataHelper.Card1().getIdCard());
-        int balanceSecondCard = dashboardPage.getCardBalance(DataHelper.Card2().getIdCard());
+        int balanceFirstCard = dashboardPage.getCardBalance(DataHelper.card1().getIdCard());
+        int balanceSecondCard = dashboardPage.getCardBalance(DataHelper.card2().getIdCard());
 
         dashboardPage
                 .choiceRechargeCard(idRechargeCard)
                 .transferMoney(sumTransfer,numberTransferCard);
 
-        Assertions.assertEquals(balanceFirstCard + sumTransfer, dashboardPage.getCardBalance(DataHelper.Card1().getIdCard()));
-        Assertions.assertEquals(balanceSecondCard - sumTransfer, dashboardPage.getCardBalance(DataHelper.Card2().getIdCard()));
+        Assertions.assertEquals(balanceFirstCard + sumTransfer, dashboardPage.getCardBalance(DataHelper.card1().getIdCard()));
+        Assertions.assertEquals(balanceSecondCard - sumTransfer, dashboardPage.getCardBalance(DataHelper.card2().getIdCard()));
 
     }
 
@@ -66,7 +67,7 @@ class MoneyTransferTest {
     void returnErrorWithInvalidCard(){
         var dashboardPage = new DashboardPage();
 
-        String idRechargeCard = DataHelper.Card2().getIdCard();
+        String idRechargeCard = DataHelper.card2().getIdCard();
         int sumTransfer = 200;
         String numberTransferCard = DataHelper.invalidCard().getNumberCard();
 
@@ -80,9 +81,9 @@ class MoneyTransferTest {
     void returnErrorIfBalanceBelow(){
         var dashboardPage = new DashboardPage();
 
-        String idRechargeCard = DataHelper.Card1().getIdCard();
-        int sumTransfer = 200 + dashboardPage.getCardBalance(DataHelper.Card2().getIdCard());
-        String numberTransferCard = DataHelper.Card2().getNumberCard();
+        String idRechargeCard = DataHelper.card1().getIdCard();
+        int sumTransfer = 200 + dashboardPage.getCardBalance(DataHelper.card2().getIdCard());
+        String numberTransferCard = DataHelper.card2().getNumberCard();
 
         var page = dashboardPage.choiceRechargeCard(idRechargeCard);
         page.transferMoney(sumTransfer, numberTransferCard);
@@ -94,9 +95,9 @@ class MoneyTransferTest {
     void returnErrorWhenTransferToTheSameCard(){
         var dashboardPage = new DashboardPage();
 
-        String idRechargeCard = DataHelper.Card2().getIdCard();
+        String idRechargeCard = DataHelper.card2().getIdCard();
         int sumTransfer = 200;
-        String numberTransferCard = DataHelper.Card2().getNumberCard();
+        String numberTransferCard = DataHelper.card2().getNumberCard();
 
         var page = dashboardPage.choiceRechargeCard(idRechargeCard);
         page.transferMoney(sumTransfer, numberTransferCard);
