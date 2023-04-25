@@ -12,6 +12,8 @@ import static com.codeborne.selenide.Selenide.open;
 
 
 class MoneyTransferTest {
+    DashboardPage validDashboardPage;
+
     @BeforeEach
     public void shouldLogin() {
         Configuration.holdBrowserOpen = true;
@@ -19,87 +21,89 @@ class MoneyTransferTest {
         var authInfo = DataHelper.getAuthInfo();
         var verificationPage = loginPage.validLogin(authInfo);
         var verificationCode = DataHelper.getVerificationCodeFor(authInfo);
-        verificationPage.validVerify(verificationCode);
+        validDashboardPage = verificationPage.validVerify(verificationCode);
+
 
     }
 
 
     @Test
     void transferMoneyFromTheFirstCardToTheSecondCard() {
-        var dashboardPage = new DashboardPage();
+        //var dashboardPage = new DashboardPage();
 
         String idRechargeCard = DataHelper.card2().getIdCard();
         int sumTransfer = 200;
         String numberTransferCard = DataHelper.card1().getNumberCard();
 
-        int balanceFirstCard = dashboardPage.getCardBalance(DataHelper.card1().getIdCard());
-        int balanceSecondCard = dashboardPage.getCardBalance(DataHelper.card2().getIdCard());
+        int balanceFirstCard = validDashboardPage.getCardBalance(DataHelper.card1().getIdCard());
+        int balanceSecondCard = validDashboardPage.getCardBalance(DataHelper.card2().getIdCard());
 
-        dashboardPage
+        validDashboardPage
                 .choiceRechargeCard(idRechargeCard)
-                .transferMoney(sumTransfer,numberTransferCard);
+                .transferMoney(sumTransfer, numberTransferCard);
 
-        Assertions.assertEquals(balanceFirstCard - sumTransfer, dashboardPage.getCardBalance(DataHelper.card1().getIdCard()));
-        Assertions.assertEquals(balanceSecondCard + sumTransfer, dashboardPage.getCardBalance(DataHelper.card2().getIdCard()));
+        Assertions.assertEquals(balanceFirstCard - sumTransfer, validDashboardPage.getCardBalance(DataHelper.card1().getIdCard()));
+        Assertions.assertEquals(balanceSecondCard + sumTransfer, validDashboardPage.getCardBalance(DataHelper.card2().getIdCard()));
 
     }
+
     @Test
     void transferMoneyFromTheSecondCardToTheFirstCard() {
-        var dashboardPage = new DashboardPage();
+        //var dashboardPage = new DashboardPage();
 
         String idRechargeCard = DataHelper.card1().getIdCard();
         int sumTransfer = 200;
         String numberTransferCard = DataHelper.card2().getNumberCard();
 
-        int balanceFirstCard = dashboardPage.getCardBalance(DataHelper.card1().getIdCard());
-        int balanceSecondCard = dashboardPage.getCardBalance(DataHelper.card2().getIdCard());
+        int balanceFirstCard = validDashboardPage.getCardBalance(DataHelper.card1().getIdCard());
+        int balanceSecondCard = validDashboardPage.getCardBalance(DataHelper.card2().getIdCard());
 
-        dashboardPage
+        validDashboardPage
                 .choiceRechargeCard(idRechargeCard)
-                .transferMoney(sumTransfer,numberTransferCard);
+                .transferMoney(sumTransfer, numberTransferCard);
 
-        Assertions.assertEquals(balanceFirstCard + sumTransfer, dashboardPage.getCardBalance(DataHelper.card1().getIdCard()));
-        Assertions.assertEquals(balanceSecondCard - sumTransfer, dashboardPage.getCardBalance(DataHelper.card2().getIdCard()));
+        Assertions.assertEquals(balanceFirstCard + sumTransfer, validDashboardPage.getCardBalance(DataHelper.card1().getIdCard()));
+        Assertions.assertEquals(balanceSecondCard - sumTransfer, validDashboardPage.getCardBalance(DataHelper.card2().getIdCard()));
 
     }
 
     @Test
-    void returnErrorWithInvalidCard(){
-        var dashboardPage = new DashboardPage();
+    void returnErrorWithInvalidCard() {
+        //var dashboardPage = new DashboardPage();
 
         String idRechargeCard = DataHelper.card2().getIdCard();
         int sumTransfer = 200;
         String numberTransferCard = DataHelper.invalidCard().getNumberCard();
 
-        var page = dashboardPage.choiceRechargeCard(idRechargeCard);
+        var page = validDashboardPage.choiceRechargeCard(idRechargeCard);
         page.transferMoney(sumTransfer, numberTransferCard);
         page.getErrorNotification();
 
     }
 
     @Test
-    void returnErrorIfBalanceBelow(){
-        var dashboardPage = new DashboardPage();
+    void returnErrorIfBalanceBelow() {
+        //var dashboardPage = new DashboardPage();
 
         String idRechargeCard = DataHelper.card1().getIdCard();
-        int sumTransfer = 200 + dashboardPage.getCardBalance(DataHelper.card2().getIdCard());
+        int sumTransfer = 200 + validDashboardPage.getCardBalance(DataHelper.card2().getIdCard());
         String numberTransferCard = DataHelper.card2().getNumberCard();
 
-        var page = dashboardPage.choiceRechargeCard(idRechargeCard);
+        var page = validDashboardPage.choiceRechargeCard(idRechargeCard);
         page.transferMoney(sumTransfer, numberTransferCard);
         page.getErrorNotification();
 
     }
 
     @Test
-    void returnErrorWhenTransferToTheSameCard(){
-        var dashboardPage = new DashboardPage();
+    void returnErrorWhenTransferToTheSameCard() {
+        //var dashboardPage = new DashboardPage();
 
         String idRechargeCard = DataHelper.card2().getIdCard();
         int sumTransfer = 200;
         String numberTransferCard = DataHelper.card2().getNumberCard();
 
-        var page = dashboardPage.choiceRechargeCard(idRechargeCard);
+        var page = validDashboardPage.choiceRechargeCard(idRechargeCard);
         page.transferMoney(sumTransfer, numberTransferCard);
         page.getErrorNotification();
 
